@@ -6,7 +6,7 @@ parking lot functionality in Go
 - `./start.sh`
     - for terminal input
 - `./start.sh Filename`
-    - for file input
+    - for file input (files under testfiles/ can be tried)
 
 Exposed utilities (inputs from terminal/file):
 - create_parking_lot Size where Size is number of parking spots inside the parking lot
