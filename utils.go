@@ -12,7 +12,9 @@ var mutex = &sync.Mutex{}
 
 func (spots *mymap) create_parking_lot(size int) {
     mutex.Lock()
-    for i := 0; i < size; i++ {
+    start := len(*spots)
+    end := len(*spots) + size
+    for i := start; i < end; i++ {
         (*spots)[i] = create_spot()
     }
     mutex.Unlock()

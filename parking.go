@@ -7,20 +7,25 @@ import (
     "strconv"
 )
 
+func get_file() *os.File {
+    if len(os.Args) > 1 {  
+        arg := os.Args[1]
+        file, err := os.Open(arg)
+//        defer file.Close()
+        if err != nil {
+            panic(err)
+        }
+        return file
+    } else {
+        return os.Stdin
+    }
+}
 
 func main() {
-    arg := os.Args[1]
-    file, err := os.Open(arg)
-    defer file.Close()
-    if err != nil {
-        return
-    }
+    file := get_file()
     reader := bufio.NewReader(file)
-
-    var line string
     for {
-        line, err = reader.ReadString('\n')
-
+        line, err := reader.ReadString('\n')
         read_line := strings.TrimSuffix(line, "\n")
         // Process the line here.
         split := strings.Split(read_line, " ")
