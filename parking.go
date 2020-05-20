@@ -1,6 +1,7 @@
 package main
 
 import (
+    "fmt"
     "os"
     "bufio"
     "strings"
@@ -52,8 +53,13 @@ func process(tokens []string) {
     case "status":
         status()
     case "registration_numbers_for_cars_with_colour":
-        spots.vehicles_with_color(tokens[1])
-    case "spot_numbers_for_cars_with_colour":
-        spots.spots_with_color(tokens[1])
+        regs := spots.vehicles_with_color(tokens[1])
+        fmt.Println(regs)
+    case "slot_numbers_for_cars_with_colour":
+        spotIds := spots.spots_with_color(tokens[1])
+        fmt.Println(spotIds)
+    case "slot_number_for_registration_number":
+        spotId, _ := spots.find_spot(tokens[1])
+        fmt.Println(spotId)
     }
 } 
