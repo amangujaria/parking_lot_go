@@ -17,7 +17,6 @@ func get_file() *os.File {
     if len(os.Args) > 1 {  
         arg := os.Args[1]
         file, err := os.Open(arg)
-//        defer file.Close()
         if err != nil {
             panic(err)
         }
@@ -29,13 +28,14 @@ func get_file() *os.File {
 
 func main() {
     file := get_file()
+    defer file.Close()
     reader := bufio.NewReader(file)
     for {
         line, err := reader.ReadString('\n')
         read_line := strings.TrimSuffix(line, "\n")
         // Process the line here.
         split := strings.Split(read_line, " ")
-        errp := process(split)
+        process(split)
         if err != nil {
             break
         }
