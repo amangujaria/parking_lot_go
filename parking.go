@@ -3,10 +3,15 @@ package main
 import (
     "fmt"
     "os"
+    "sync"
     "bufio"
     "strings"
     "strconv"
 )
+
+type mymap map[int]*spot
+var spots = make(mymap)
+var mutex = &sync.Mutex{}
 
 func get_file() *os.File {
     if len(os.Args) > 1 {  
@@ -30,15 +35,19 @@ func main() {
         read_line := strings.TrimSuffix(line, "\n")
         // Process the line here.
         split := strings.Split(read_line, " ")
-        process(split)
-
+        errp := process(split)
         if err != nil {
             break
         }
     }
 }
 
-func process(tokens []string) {
+func process(tokens []string) (err error) {
+    defer func() {
+      if r := recover(); r != nil {
+         err = r.(error)
+      }
+    }()
     switch tokens[0] {
     case "create_parking_lot":
         size, _ := strconv.Atoi(tokens[1])
@@ -61,5 +70,8 @@ func process(tokens []string) {
     case "slot_number_for_registration_number":
         spotId, _ := spots.find_spot(tokens[1])
         fmt.Println(spotId)
+    default:
+        fmt.Println("incorrect operation")
     }
+    return
 } 

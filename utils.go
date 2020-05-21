@@ -2,22 +2,16 @@ package main
 
 import (
     "fmt"
-    "sync"
 )
-
-type mymap map[int]*spot
-
-var spots = make(mymap)
-var mutex = &sync.Mutex{}
 
 func (spots *mymap) create_parking_lot(size int) {
     mutex.Lock()
+    defer mutex.Unlock()
     start := len(*spots)
     end := len(*spots) + size
     for i := start; i < end; i++ {
         (*spots)[i] = create_spot()
     }
-    mutex.Unlock()
 }
 
 func (spots *mymap) find_vacant() int {
@@ -32,17 +26,17 @@ func (spots *mymap) find_vacant() int {
 
 func (spots *mymap) park(registration string, color string) {
     mutex.Lock()
+    defer mutex.Unlock()
     pos := spots.find_vacant()
     activity(pos, *spots, "arrive")
     modify_attributes(pos, *spots, registration, color)
-    mutex.Unlock()
 }
 
 func (spots *mymap) leave(id int) {
     mutex.Lock()
+    defer mutex.Unlock()
     activity(id, *spots, "leave")
     modify_attributes(id, *spots, "", "")
-    mutex.Unlock()
 }
 
 func (spots *mymap) find(color string) int {
